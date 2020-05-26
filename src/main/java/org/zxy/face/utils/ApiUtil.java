@@ -14,9 +14,13 @@ public class ApiUtil {
 
     public void verifyApi(String api) {
         //redisTemplate.opsForSet().;
-        if (stringRedisTemplate.opsForValue().get(api) == null) {
+        String value = stringRedisTemplate.opsForValue().get(api);
+        if (value == null) {
             throw new ApiException();
         }
+
+        // 否则保存的数字加1，代表此人访问了多少次；
+        stringRedisTemplate.opsForValue().set(api, MathUtil.add(value));
     }
 
     public void addApi(String api) {
