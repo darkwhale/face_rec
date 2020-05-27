@@ -28,8 +28,11 @@ public class UserController {
     public ResponseVO login(@Valid @RequestBody UserLoginForm userLoginForm,
                             HttpSession session) {
         ResponseVO userResponse = userService.login(userLoginForm);
-        session.setAttribute(FaceConst.CURRENT_USER, userResponse.getData());
-        return userService.login(userLoginForm);
+        // 成功才写入session；
+        if (userResponse.getCode() == 0) {
+            session.setAttribute(FaceConst.CURRENT_USER, userResponse.getData());
+        }
+        return userResponse;
     }
 
     @GetMapping("/user")

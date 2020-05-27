@@ -1,5 +1,6 @@
 package org.zxy.face.exceptions;
 
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +26,12 @@ public class RunTimeExceptionHandler {
     @ExceptionHandler(ApiException.class)
     @ResponseBody
     public ResponseVO apiExceptionHandler() {
+        return ResponseVO.error(ResponseEnum.API_NOT_EXIST);
+    }
+
+    @ExceptionHandler(JSONException.class)
+    @ResponseBody
+    public ResponseVO jsonExceptionHandler() {
         return ResponseVO.error(ResponseEnum.API_NOT_EXIST);
     }
 }

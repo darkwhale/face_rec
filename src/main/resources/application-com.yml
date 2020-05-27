@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: zxy
+    password: 940213
+    url: jdbc:mysql://127.0.0.1/face?serverTimezone=UTC&characterEncoding=utf-8&useSSL=False
+  jpa:
+    show-sql: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
+  redis:
+    host: 192.168.99.100
+    port: 6379
+server:
+  servlet:
+    context-path: /face
+  port: 8080
+
+dest:
+  url: http://111.231.115.97:8000/get_feature

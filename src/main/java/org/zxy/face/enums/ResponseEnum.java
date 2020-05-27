@@ -24,6 +24,8 @@ public enum  ResponseEnum {
     PERSON_EXIST(6, "用户id已存在"),
 
     PERSON_ID_OR_NAME_ERROR(7, "用户id或name错误"),
+
+    JSON_ERROR(8, "json错误"),
     ;
 
 
