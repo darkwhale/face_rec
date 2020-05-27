@@ -16,3 +16,6 @@ server:
   servlet:
     context-path: /face
   port: 8080
+
+dest:
+  url: http://111.231.115.97:8000/get_feature

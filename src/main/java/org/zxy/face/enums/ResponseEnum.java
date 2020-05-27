@@ -26,6 +26,13 @@ public enum  ResponseEnum {
     PERSON_ID_OR_NAME_ERROR(7, "用户id或name错误"),
 
     JSON_ERROR(8, "json错误"),
+
+    PERSON_NOT_EXIST(9, "personId不存在"),
+
+    IMAGE_ERROR(11, "图像错误：格式错误、不存在人脸、人脸数不准确"),
+
+    REQUEST_ERROR(12, "调用方法不正确"),
+
     ;
 
 

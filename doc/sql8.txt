@@ -27,7 +27,7 @@ create table face_info(
     api varchar(32) not null,
     person_id varchar(32) not null,
 
-    image_path varchar(100) not null,
+    image_name varchar(32) not null,
     create_time timestamp not null default current_timestamp,
     primary key(id)
 )engine=Innodb default charset=utf8;

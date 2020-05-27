@@ -21,3 +21,15 @@ create table `person_info`(
     primary key(`id`)
 )engine=Innodb default charset=utf8;
 
+
+drop table if exists `face_info`;
+create table `face_info`(
+    `id` varchar(32) not null,
+
+    `api` varchar(32) not null,
+    `person_id` varchar(32) not null,
+
+    `image_name` varchar(32) not null,
+    `create_time` timestamp not null default current_timestamp,
+    primary key(`id`)
+)engine=Innodb default charset=utf8;

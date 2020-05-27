@@ -21,7 +21,7 @@ public class FaceInfo {
 
     private String personId;
 
-    private String imagePath;
+    private String imageName;
 
     private Date createTime;
 

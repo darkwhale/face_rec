@@ -31,12 +31,6 @@ public class HttpUtil {
         RestTemplate template = new RestTemplate();
         ResponseEntity<String> result = template.postForEntity(destConfig.getUrl(), entity, String.class);
 
-        log.info("response:{}", result);
-
-        FaceAddFormat faceAddFormat = gson.fromJson(result.getBody(), FaceAddFormat.class);
-
-        log.info("face_result:{}", faceAddFormat);
-
-        return null;
+        return gson.fromJson(result.getBody(), FaceAddFormat.class);
     }
 }

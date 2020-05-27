@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class FaceFeatureCorrespond {
 
-    private String image_name;
+    private String imageName;
 
     private Rectangle rectangle;
 
