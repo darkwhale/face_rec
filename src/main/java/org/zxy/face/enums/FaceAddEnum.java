@@ -9,7 +9,11 @@ public enum FaceAddEnum {
 
     IMAGE_ERROR(1, "图像错误：格式错误、不存在人脸、人脸数不准确"),
 
-    REQUEST_ERROR(2, "调用方法不正确"),
+    OTHER_ERROR(2, "其他错误"),
+
+    REQUEST_ERROR(3, "调用方法不正确"),
+
+
     ;
 
     private Integer code;

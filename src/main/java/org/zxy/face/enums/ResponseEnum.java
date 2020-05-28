@@ -33,6 +33,16 @@ public enum  ResponseEnum {
 
     REQUEST_ERROR(12, "调用方法不正确"),
 
+    FACE_NOT_EXIST(13, "faceId不存在"),
+
+    FACE_NOT_EMPTY(14, "人脸数不为空"),
+
+    REDIS_ERROR(15, "redis出错"),
+
+    OTHER_ERROR(16, "调用方法不正确"),
+
+    PERSON_OR_FACE_EMPTY(17, "personId不存在或用户未注册人脸"),
+
     ;
 
 

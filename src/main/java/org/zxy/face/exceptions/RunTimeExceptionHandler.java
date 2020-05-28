@@ -1,5 +1,6 @@
 package org.zxy.face.exceptions;
 
+import io.lettuce.core.RedisException;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -33,5 +34,11 @@ public class RunTimeExceptionHandler {
     @ResponseBody
     public ResponseVO jsonExceptionHandler() {
         return ResponseVO.error(ResponseEnum.API_NOT_EXIST);
+    }
+
+    @ExceptionHandler(RedisException.class)
+    @ResponseBody
+    public ResponseVO redisExceptionHandler() {
+        return ResponseVO.error(ResponseEnum.REDIS_ERROR);
     }
 }

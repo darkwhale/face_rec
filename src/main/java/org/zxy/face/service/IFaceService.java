@@ -7,13 +7,16 @@ import org.zxy.face.form.FaceDeleteForm;
 import org.zxy.face.form.FaceMultiMatchForm;
 import org.zxy.face.form.FaceSingleMatchForm;
 
+import java.util.List;
+
 public interface IFaceService {
 
     ResponseVO add(FaceAddForm faceAddForm) throws JSONException;
 
     ResponseVO delete(FaceDeleteForm faceDeleteForm);
 
-    ResponseVO singleMatch(FaceSingleMatchForm faceSingleMatchForm);
+    ResponseVO singleMatch(FaceSingleMatchForm faceSingleMatchForm) throws JSONException;
 
     ResponseVO multiMatch(FaceMultiMatchForm faceMultiMatchForm);
+
 }

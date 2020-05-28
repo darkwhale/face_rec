@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.zxy.face.config.DestConfig;
 import org.zxy.face.correspond.FaceAddFormat;
+import org.zxy.face.correspond.FaceMatchFormat;
 
 import javax.annotation.Resource;
 
@@ -33,4 +34,16 @@ public class HttpUtil {
 
         return gson.fromJson(result.getBody(), FaceAddFormat.class);
     }
+
+    public FaceMatchFormat postForFaceMatch(String imageBase64) throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("image_json", imageBase64);
+
+        HttpEntity<String> entity = new HttpEntity<>(json.toString());
+        RestTemplate template = new RestTemplate();
+        ResponseEntity<String> result = template.postForEntity(destConfig.getUrl(), entity, String.class);
+
+        return gson.fromJson(result.getBody(), FaceMatchFormat.class);
+    }
+
 }

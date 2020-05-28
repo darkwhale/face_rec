@@ -3,18 +3,27 @@ package org.zxy.face.service.Impl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.zxy.face.VO.ResponseVO;
 import org.zxy.face.VO.UserVO;
+import org.zxy.face.correspond.FaceFeatureCorrespond;
+import org.zxy.face.dataobject.FaceInfo;
+import org.zxy.face.dataobject.PersonInfo;
 import org.zxy.face.dataobject.UserInfo;
 import org.zxy.face.enums.ResponseEnum;
+import org.zxy.face.form.UserListForm;
 import org.zxy.face.form.UserLoginForm;
 import org.zxy.face.form.UserRegisterForm;
+import org.zxy.face.repository.FaceRepository;
+import org.zxy.face.repository.PersonRepository;
 import org.zxy.face.repository.UserRepository;
 import org.zxy.face.service.IUserService;
 import org.zxy.face.utils.ApiUtil;
 import org.zxy.face.utils.KeyUtil;
 
 import javax.annotation.Resource;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -22,7 +31,7 @@ public class UserServiceImpl implements IUserService {
     @Resource
     private UserRepository userRepository;
 
-    @Autowired
+    @Resource
     private ApiUtil apiUtil;
 
     @Override
@@ -66,5 +75,39 @@ public class UserServiceImpl implements IUserService {
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(userInfo, userVO);
         return ResponseVO.success(userVO);
+    }
+
+    @Override
+    public ResponseVO list(UserListForm userListForm) {
+        apiUtil.verifyApi(userListForm.getApi());
+
+
+        //List<FaceInfo> faceInfoList = faceRepository.findAllByApiAndPersonIdIn(userListForm.getApi(), personIdList);
+        //
+        //Map<String, List<FaceInfo>> faceInfoMap = faceInfoList.stream().collect(Collectors.groupingBy(FaceInfo::getPersonId));
+        //Map<String, List<String>> faceResult = new TreeMap<>();
+        //for (Map.Entry<String, List<FaceInfo>> entry : faceInfoMap.entrySet()) {
+        //    faceResult.put(entry.getKey(), entry.getValue().stream().map(FaceInfo::getId).collect(Collectors.toList()));
+        //}
+        //
+        //for (String personId : personIdList) {
+        //    if (!faceResult.containsKey(personId)){
+        //        faceResult.put(personId, new ArrayList<>());
+        //    }
+        //}
+
+        //return ResponseVO.success(faceResult);
+
+        // 调redis
+        Map<String, List<FaceFeatureCorrespond>> FaceFeatureMap = apiUtil.readFaceRedis(userListForm.getApi());
+        Map<String, List<String>> faceResult = new TreeMap<>();
+        for (Map.Entry<String, List<FaceFeatureCorrespond>> entry : FaceFeatureMap.entrySet()) {
+            faceResult.put(
+                    entry.getKey(),
+                    entry.getValue().stream().map(FaceFeatureCorrespond::getId).collect(Collectors.toList())
+                    );
+        }
+
+        return ResponseVO.success(faceResult);
     }
 }
