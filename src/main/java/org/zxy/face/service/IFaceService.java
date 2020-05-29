@@ -17,6 +17,6 @@ public interface IFaceService {
 
     ResponseVO singleMatch(FaceSingleMatchForm faceSingleMatchForm) throws JSONException;
 
-    ResponseVO multiMatch(FaceMultiMatchForm faceMultiMatchForm);
+    ResponseVO multiMatch(FaceMultiMatchForm faceMultiMatchForm) throws JSONException;
 
 }

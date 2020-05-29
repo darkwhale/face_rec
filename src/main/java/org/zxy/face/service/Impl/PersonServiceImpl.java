@@ -37,7 +37,10 @@ public class PersonServiceImpl implements IPersonService {
 
         // 查找数据库是否有该person
         // 如果已经有，则错误
-        if (personRepository.findByApiAndPersonId(personForm.getApi(), personForm.getPersonId()) != null) {
+        //if (personRepository.findByApiAndPersonId(personForm.getApi(), personForm.getPersonId()) != null) {
+        //    return ResponseVO.error(ResponseEnum.PERSON_EXIST);
+        //}
+        if (apiUtil.existPersonId(personForm.getApi(), personForm.getPersonId())) {
             return ResponseVO.error(ResponseEnum.PERSON_EXIST);
         }
 
@@ -88,9 +91,13 @@ public class PersonServiceImpl implements IPersonService {
 
         // 查找数据库是否有该person
         // 如果没有，则错误
-        if (personRepository.findByApiAndPersonId(personListForm.getApi(), personListForm.getPersonId()) == null) {
+        //if (personRepository.findByApiAndPersonId(personListForm.getApi(), personListForm.getPersonId()) == null) {
+        //    return ResponseVO.error(ResponseEnum.PERSON_NOT_EXIST);
+        //}
+        if (!apiUtil.existPersonId(personListForm.getApi(), personListForm.getPersonId())) {
             return ResponseVO.error(ResponseEnum.PERSON_NOT_EXIST);
         }
+
         List<FaceFeatureCorrespond> faceFeatureCorrespondList = apiUtil.readFaceRedis(personListForm.getApi(), personListForm.getPersonId());
         List<String> result = faceFeatureCorrespondList.stream().map(FaceFeatureCorrespond::getId).collect(Collectors.toList());
         return ResponseVO.success(result);

@@ -7,6 +7,7 @@ import org.zxy.face.VO.ResponseVO;
 import org.zxy.face.correspond.FaceMatchFormat;
 import org.zxy.face.form.FaceAddForm;
 import org.zxy.face.form.FaceDeleteForm;
+import org.zxy.face.form.FaceMultiMatchForm;
 import org.zxy.face.form.FaceSingleMatchForm;
 import org.zxy.face.service.Impl.FaceServiceImpl;
 
@@ -34,6 +35,11 @@ public class FaceController {
     @PostMapping("/single_match")
     public ResponseVO singleMatch(@Valid @RequestBody FaceSingleMatchForm faceSingleMatchForm) throws JSONException {
         return faceService.singleMatch(faceSingleMatchForm);
+    }
+
+    @PostMapping("/multi_match")
+    public ResponseVO multiMatch(@Valid @RequestBody FaceMultiMatchForm faceMultiMatchForm) throws JSONException {
+        return faceService.multiMatch(faceMultiMatchForm);
     }
 
 }

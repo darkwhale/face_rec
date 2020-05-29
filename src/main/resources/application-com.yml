@@ -8,7 +8,7 @@ spring:
     show-sql: true
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
-    default-property-inclusion: non_null
+#    default-property-inclusion: non_null
   redis:
     host: 192.168.99.100
     port: 6379
@@ -19,3 +19,4 @@ server:
 
 dest:
   url: http://111.231.115.97:8000/get_feature
+

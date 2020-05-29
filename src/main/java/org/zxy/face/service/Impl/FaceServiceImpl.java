@@ -1,31 +1,33 @@
 package org.zxy.face.service.Impl;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Service;
 import org.zxy.face.VO.FaceVO;
+import org.zxy.face.VO.MatchMultiVO;
+import org.zxy.face.VO.MatchSingleVO;
 import org.zxy.face.VO.ResponseVO;
 import org.zxy.face.correspond.FaceAddFormat;
 import org.zxy.face.correspond.FaceFeatureCorrespond;
 import org.zxy.face.correspond.FaceMatchFormat;
-import org.zxy.face.dataobject.FaceInfo;
-import org.zxy.face.dataobject.PersonInfo;
+import org.zxy.face.correspond.MatchElement;
 import org.zxy.face.enums.FaceAddEnum;
+import org.zxy.face.enums.MatchEnum;
 import org.zxy.face.enums.ResponseEnum;
 import org.zxy.face.form.FaceAddForm;
 import org.zxy.face.form.FaceDeleteForm;
 import org.zxy.face.form.FaceMultiMatchForm;
 import org.zxy.face.form.FaceSingleMatchForm;
-import org.zxy.face.repository.FaceRepository;
-import org.zxy.face.repository.PersonRepository;
 import org.zxy.face.service.IFaceService;
 import org.zxy.face.utils.ApiUtil;
 import org.zxy.face.utils.HttpUtil;
 import org.zxy.face.utils.KeyUtil;
+import org.zxy.face.utils.MathUtil;
 
 import javax.annotation.Resource;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,17 +39,12 @@ public class FaceServiceImpl implements IFaceService {
     @Resource
     private HttpUtil httpUtil;
 
-    @Resource
-    private PersonRepository personRepository;
-
     @Override
     public ResponseVO add(FaceAddForm faceAddForm) throws JSONException {
         // 验api
         apiUtil.verifyApi(faceAddForm.getApi());
 
-        // 验person是否存在
-        PersonInfo personInfo = personRepository.findByApiAndPersonId(faceAddForm.getApi(), faceAddForm.getPersonId());
-        if (personInfo == null) {
+        if (!apiUtil.existPersonId(faceAddForm.getApi(), faceAddForm.getPersonId())) {
             return ResponseVO.error(ResponseEnum.PERSON_NOT_EXIST);
         }
 
@@ -70,21 +67,15 @@ public class FaceServiceImpl implements IFaceService {
             return ResponseVO.error(ResponseEnum.ERROR);
         }
 
-        // 构造faceInfo;
-        FaceInfo faceInfo = new FaceInfo();
-        faceInfo.setId(KeyUtil.getUniqueKey());
-        faceInfo.setApi(faceAddForm.getApi());
-        faceInfo.setPersonId(faceAddForm.getPersonId());
-        faceInfo.setImageName(faceAddFormat.getData().getImageName());
-
         // 写redis
         FaceFeatureCorrespond faceFeatureCorrespond = faceAddFormat.getData();
-        faceFeatureCorrespond.setId(faceInfo.getId());
+        faceFeatureCorrespond.setId(KeyUtil.getUniqueKey());
 
-        apiUtil.writeFaceRedis(faceAddForm.getApi(), faceInfo.getPersonId(), faceFeatureCorrespond);
+        apiUtil.writeFaceRedis(faceAddForm.getApi(), faceAddForm.getPersonId(), faceFeatureCorrespond);
 
         FaceVO faceVO = new FaceVO();
-        BeanUtils.copyProperties(faceInfo, faceVO);
+        faceVO.setId(faceFeatureCorrespond.getId());
+        faceVO.setPersonId(faceAddForm.getPersonId());
 
         return ResponseVO.success(faceVO);
     }
@@ -112,20 +103,6 @@ public class FaceServiceImpl implements IFaceService {
         // 验api
         apiUtil.verifyApi(faceSingleMatchForm.getApi());
 
-        // 查人脸
-        //List<FaceInfo> faceInfoList = faceRepository.findAllByApiAndPersonId(faceSingleMatchForm.getApi(), faceSingleMatchForm.getPersonId());
-        //if (faceInfoList.isEmpty()) {
-        //    return ResponseVO.error(ResponseEnum.PERSON_OR_FACE_EMPTY);
-        //}
-        //// 人脸id获取
-        //List<String> faceIdList = faceInfoList.stream().map(FaceInfo::getId).collect(Collectors.toList());
-        //List<FaceFeatureCorrespond> faceFeatureListRedis = apiUtil.getFaceFeatureByFaceIdList(faceSingleMatchForm.getApi(), faceIdList);
-        //
-        //// 调django获取人脸特征；
-        //FaceMatchFormat faceMatchFormat = httpUtil.postForFaceMatch(faceSingleMatchForm.getImage());
-        //
-        //List<FaceFeatureCorrespond> faceFeatureList = faceMatchFormat.getData();
-
         List<FaceFeatureCorrespond> faceFeatureCorrespondList = apiUtil.readFaceRedis(faceSingleMatchForm.getApi(), faceSingleMatchForm.getPersonId());
         if (faceFeatureCorrespondList.isEmpty()) {
             return ResponseVO.error(ResponseEnum.PERSON_OR_FACE_EMPTY);
@@ -137,14 +114,57 @@ public class FaceServiceImpl implements IFaceService {
             return ResponseVO.error(ResponseEnum.IMAGE_ERROR);
         }
 
-        return null;
+        List<MatchElement> matchResult = MathUtil.getDistance(faceMatchFormat.getData(), faceFeatureCorrespondList);
+
+        List<MatchSingleVO> matchSingleVOList = new ArrayList<>();
+        for (MatchElement matchElement : matchResult) {
+            matchSingleVOList.add(new MatchSingleVO(matchElement.getRectangle(), matchElement.getMatched()));
+        }
+
+        return ResponseVO.success(matchSingleVOList);
 
     }
 
     @Override
-    public ResponseVO multiMatch(FaceMultiMatchForm faceMultiMatchForm) {
-        return null;
+    public ResponseVO multiMatch(FaceMultiMatchForm faceMultiMatchForm) throws JSONException {
+        // 验api
+        apiUtil.verifyApi(faceMultiMatchForm.getApi());
+
+        Map<String, List<FaceFeatureCorrespond>> personFaceMap = apiUtil.readFaceRedis(faceMultiMatchForm.getApi());
+
+        // 构造从faceId到personId的map
+        Map<String, String> face2PersonMap = new HashMap<>();
+
+        for (Map.Entry<String, List<FaceFeatureCorrespond>> entry: personFaceMap.entrySet()) {
+            List<String> collect = entry.getValue().stream().map(FaceFeatureCorrespond::getId).collect(Collectors.toList());
+            for (String faceId : collect) {
+                face2PersonMap.put(faceId, entry.getKey());
+            }
+        }
+
+        // 将personFaceMap的列表合并起来；
+        List<FaceFeatureCorrespond> totalFaceList = new ArrayList<>();
+        for (Map.Entry<String, List<FaceFeatureCorrespond>> entry: personFaceMap.entrySet()) {
+            totalFaceList.addAll(entry.getValue());
+        }
+
+        // 调接口获取图像特征；
+        FaceMatchFormat faceMatchFormat = httpUtil.postForFaceMatch(faceMultiMatchForm.getImage());
+
+        if (!faceMatchFormat.getCode().equals(FaceAddEnum.SUCCESS.getCode())) {
+            return ResponseVO.error(ResponseEnum.IMAGE_ERROR);
+        }
+
+        List<MatchElement> matchResult = MathUtil.getDistance(faceMatchFormat.getData(), totalFaceList);
+
+        List<MatchMultiVO> matchMultiVOList = new ArrayList<>();
+        for (MatchElement matchElement : matchResult) {
+            matchMultiVOList.add(new MatchMultiVO(matchElement.getRectangle(),
+                    matchElement.getMatched().equals(MatchEnum.Match.getCode()) ?
+                    face2PersonMap.get(matchElement.getFaceId()) : null));
+        }
+
+        return ResponseVO.success(matchMultiVOList);
+
     }
-
-
 }

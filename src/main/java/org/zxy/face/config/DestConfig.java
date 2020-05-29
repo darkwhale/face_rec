@@ -10,4 +10,6 @@ import org.springframework.stereotype.Component;
 public class DestConfig {
 
     private String url;
+
+    private Double threshold;
 }

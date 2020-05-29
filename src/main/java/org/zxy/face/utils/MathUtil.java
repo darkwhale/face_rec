@@ -1,13 +1,15 @@
 package org.zxy.face.utils;
 
-import org.hibernate.query.criteria.internal.expression.function.AggregationFunction;
+import org.zxy.face.consts.FaceConst;
 import org.zxy.face.correspond.FaceFeatureCorrespond;
 import org.zxy.face.correspond.MatchElement;
+import org.zxy.face.enums.MatchEnum;
 
-import javax.validation.constraints.Max;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MathUtil {
+
 
     public static String add(String numStr){
         if (numStr.equals("")) {
@@ -16,24 +18,37 @@ public class MathUtil {
         return String.valueOf(Integer.parseInt(numStr) + 1);
     }
 
-    public static MatchElement getDistance(List<FaceFeatureCorrespond> firstList, List<FaceFeatureCorrespond> secondList) {
-        double distance = 1000000;
-        FaceFeatureCorrespond faceFeatureCorrespond;
+    /**
+     *
+     * @param firstList: 用户提交的图片中的人脸特征
+     * @param secondList： 数据库中的人脸特征
+     * @return 最小的距离和索引
+     */
+    public static List<MatchElement> getDistance(List<FaceFeatureCorrespond> firstList, List<FaceFeatureCorrespond> secondList) {
+
+        List<MatchElement> matchElementList = new ArrayList<>();
 
         for (FaceFeatureCorrespond first : firstList) {
+
+            double distance = 100000000;
+            String faceId = null;
+
             for (FaceFeatureCorrespond second : secondList) {
                 double thisDistance = getDistanceFloat(first.getFeature(), second.getFeature());
                 if (thisDistance < distance) {
                     distance = thisDistance;
-                    faceFeatureCorrespond = second;
+                    faceId = second.getId();
                 }
             }
+
+            Integer matched = distance < FaceConst.threshold?
+                    MatchEnum.Match.getCode(): MatchEnum.NOT_MATCH.getCode();
+
+            MatchElement matchElement = new MatchElement(first.getRectangle(), faceId, matched);
+            matchElementList.add(matchElement);
         }
 
-        MatchElement matchElement = new MatchElement();
-        matchElement.setDistance(distance);
-
-        return null;
+        return matchElementList;
 
     }
 

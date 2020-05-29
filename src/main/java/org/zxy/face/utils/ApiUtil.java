@@ -56,6 +56,12 @@ public class ApiUtil {
         return result;
     }
 
+    public boolean existPersonId(String api, String personId) {
+        String value = (String) stringRedisTemplate.opsForHash().get(PERSON_PREFIX + api, personId);
+
+        return !StringUtils.isEmpty(value);
+    }
+
     public List<FaceFeatureCorrespond> readFaceRedis(String api, String personId) {
         String value = (String) stringRedisTemplate.opsForHash().get(PERSON_PREFIX + api, personId);
 
