@@ -20,9 +20,38 @@ public class UserController {
     @Resource
     private UserServiceImpl userService;
 
-    @GetMapping("/list")
+
+    @PostMapping("/register")
+    public ResponseVO register(@Valid @RequestBody UserRegisterForm userRegisterForm) {
+        return userService.register(userRegisterForm);
+    }
+
+    @PostMapping("/login")
+    public ResponseVO login(@Valid @RequestBody UserLoginForm userLoginForm,
+                            HttpSession session) {
+        ResponseVO userResponse = userService.login(userLoginForm);
+        // 成功才写入session；
+        if (userResponse.getCode() == 0) {
+            session.setAttribute(FaceConst.CURRENT_USER, userResponse.getData());
+        }
+        return userResponse;
+    }
+
+    @GetMapping("/user")
+    public ResponseVO user(HttpSession session) {
+        UserVO userVO = (UserVO) session.getAttribute(FaceConst.CURRENT_USER);
+        return ResponseVO.success(userVO);
+    }
+
+
+    @PostMapping("/list")
     public ResponseVO list(@Valid @RequestBody UserListForm userListForm) {
         return userService.list(userListForm);
+    }
+
+    @PostMapping("listForImage")
+    public ResponseVO listForImage(@Valid @RequestBody UserListForm userListForm) {
+        return userService.listForImage(userListForm);
     }
 
 }

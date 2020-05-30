@@ -11,5 +11,5 @@ public class DestConfig {
 
     private String url;
 
-    private Double threshold;
+    private String imageServer;
 }

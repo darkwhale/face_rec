@@ -4,8 +4,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.zxy.face.VO.FaceImageVO;
 import org.zxy.face.VO.ResponseVO;
 import org.zxy.face.VO.UserVO;
+import org.zxy.face.config.DestConfig;
 import org.zxy.face.correspond.FaceFeatureCorrespond;
 import org.zxy.face.dataobject.FaceInfo;
 import org.zxy.face.dataobject.PersonInfo;
@@ -33,6 +35,9 @@ public class UserServiceImpl implements IUserService {
 
     @Resource
     private ApiUtil apiUtil;
+
+    @Resource
+    private DestConfig destConfig;
 
     @Override
     public ResponseVO register(UserRegisterForm userRegisterForm) {
@@ -108,6 +113,27 @@ public class UserServiceImpl implements IUserService {
                     );
         }
 
+        return ResponseVO.success(faceResult);
+    }
+
+
+    @Override
+    public ResponseVO listForImage(UserListForm userListForm) {
+        apiUtil.verifyApi(userListForm.getApi());
+
+        Map<String, List<FaceFeatureCorrespond>> FaceFeatureMap = apiUtil.readFaceRedis(userListForm.getApi());
+        Map<String, List<FaceImageVO>> faceResult = new TreeMap<>();
+        for (Map.Entry<String, List<FaceFeatureCorrespond>> entry : FaceFeatureMap.entrySet()) {
+            faceResult.put(
+                    entry.getKey(),
+                    entry.getValue().stream().map(e -> {
+                        FaceImageVO faceImageVO = new FaceImageVO();
+                        faceImageVO.setId(e.getId());
+                        faceImageVO.setImageName(destConfig.getImageServer() + e.getImageName());
+                        return faceImageVO;
+                    }).collect(Collectors.toList())
+            );
+        }
         return ResponseVO.success(faceResult);
     }
 }

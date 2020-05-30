@@ -19,4 +19,5 @@ server:
 
 dest:
   url: http://111.231.115.97:8000/get_feature
+  imageServer: http://111.231.115.97/
 

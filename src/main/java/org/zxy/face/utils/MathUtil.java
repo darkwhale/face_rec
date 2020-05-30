@@ -11,7 +11,7 @@ import java.util.List;
 public class MathUtil {
 
 
-    public static String add(String numStr){
+    static String add(String numStr){
         if (numStr.equals("")) {
             return "1";
         }

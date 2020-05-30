@@ -3,6 +3,7 @@ package org.zxy.face.controller;
 
 import org.springframework.web.bind.annotation.*;
 import org.zxy.face.VO.ResponseVO;
+import org.zxy.face.form.PersonDeleteForm;
 import org.zxy.face.form.PersonForm;
 import org.zxy.face.form.PersonListForm;
 import org.zxy.face.service.Impl.PersonServiceImpl;
@@ -23,8 +24,8 @@ public class PersonController {
     }
 
     @PostMapping("/delete")
-    public ResponseVO delete(@Valid @RequestBody PersonForm personForm) {
-        return personService.delete(personForm);
+    public ResponseVO delete(@Valid @RequestBody PersonDeleteForm personDeleteForm) {
+        return personService.delete(personDeleteForm);
     }
 
     @GetMapping("/list")

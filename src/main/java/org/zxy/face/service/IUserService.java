@@ -12,4 +12,6 @@ public interface IUserService {
     ResponseVO login(UserLoginForm userLoginForm);
 
     ResponseVO list(UserListForm userListForm);
+
+    ResponseVO listForImage(UserListForm userListForm);
 }

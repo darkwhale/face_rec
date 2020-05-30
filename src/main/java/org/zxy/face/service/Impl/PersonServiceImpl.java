@@ -5,12 +5,11 @@ import org.springframework.stereotype.Service;
 import org.zxy.face.VO.PersonVO;
 import org.zxy.face.VO.ResponseVO;
 import org.zxy.face.correspond.FaceFeatureCorrespond;
-import org.zxy.face.dataobject.FaceInfo;
 import org.zxy.face.dataobject.PersonInfo;
 import org.zxy.face.enums.ResponseEnum;
+import org.zxy.face.form.PersonDeleteForm;
 import org.zxy.face.form.PersonForm;
 import org.zxy.face.form.PersonListForm;
-import org.zxy.face.repository.FaceRepository;
 import org.zxy.face.repository.PersonRepository;
 import org.zxy.face.service.IPersonService;
 import org.zxy.face.utils.ApiUtil;
@@ -62,21 +61,20 @@ public class PersonServiceImpl implements IPersonService {
     }
 
     @Override
-    public ResponseVO delete(PersonForm personForm) {
+    public ResponseVO delete(PersonDeleteForm personDeleteForm) {
         // 查找api是否合法；通过redis
-        apiUtil.verifyApi(personForm.getApi());
+        apiUtil.verifyApi(personDeleteForm.getApi());
 
-        PersonInfo personInfo = personRepository.findByApiAndPersonIdAndPersonName(personForm.getApi(),
-                personForm.getPersonId(),
-                personForm.getPersonName());
+        PersonInfo personInfo = personRepository.findByApiAndPersonId(personDeleteForm.getApi(),
+                personDeleteForm.getPersonId());
         if (personInfo == null) {
-            return ResponseVO.error(ResponseEnum.PERSON_ID_OR_NAME_ERROR);
+            return ResponseVO.error(ResponseEnum.PERSON_NOT_EXIST);
         }
 
         personRepository.delete(personInfo);
 
         // 删除redis内容
-        apiUtil.deleteFaceRedis(personForm.getApi(), personForm.getPersonId());
+        apiUtil.deleteFaceRedis(personDeleteForm.getApi(), personDeleteForm.getPersonId());
 
         PersonVO personVO = new PersonVO();
         BeanUtils.copyProperties(personInfo, personVO);
