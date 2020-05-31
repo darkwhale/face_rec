@@ -7,7 +7,7 @@
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
     <script type="text/javascript" src="http://cdn.staticfile.org/twitter-bootstrap/3.0.1/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/face_controller.js"></script>
-    <script type="text/javascript" src="js/person_add.js"></script>
+    <script type="text/javascript" src="js/face_add.js"></script>
 </head>
 
 <body>
@@ -48,9 +48,13 @@
                     <label for="person_id">person_id</label><input type="text" class="form-control" id="person_id" />
                 </div>
                 <div class="form-group">
-                    <label for="person_name">person_name</label><input type="text" class="form-control" id="person_name" />
+                    <img id="image_window" src="" style="display: none" alt="">
                 </div>
-                <button onclick="ajax_person_add();" class="btn btn-default">提交</button>
+                <div class="form-group">
+                    <label for="input_image">选择图片</label>
+                    <input type="file" onchange="image_change();" accept="image/png,image/jpeg" id="input_image" />
+                </div>
+                <button onclick="ajax_face_add();" class="btn btn-default">提交</button>
             </div>
         </div>
     </div>
@@ -58,3 +62,9 @@
 
 </body>
 </html>
+
+<div class="container">
+    <div class="row clearfix">
+
+    </div>
+</div>

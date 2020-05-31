@@ -10,4 +10,5 @@ public class FaceApplication {
         SpringApplication.run(FaceApplication.class, args);
     }
 
+
 }

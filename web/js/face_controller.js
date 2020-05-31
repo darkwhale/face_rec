@@ -67,7 +67,7 @@ function ajax_login() {
                     document.cookie = 'username=' + message.data.username;
                     document.cookie = 'api=' + message.data.api;
 
-                    window.location="http://127.0.0.1"
+                    window.location="http://127.0.0.1";
                 }else{
                     alert("用户名或密码错误");
                 }
@@ -109,3 +109,4 @@ function getCookie(name)
     }
     return ""
 }
+

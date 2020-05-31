@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" name="referrer" content="no-referrer" >
+    <meta charset="UTF-8"  name="referrer" content="no-referrer" >
     <title>登录</title>
     <script type="text/javascript" src="http://cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
@@ -30,7 +30,7 @@
                             <a href="#">api</a>
                         </li>
                         <li>
-                            <a href="#">识别</a>
+                            <a href="match.html">识别</a>
                         </li>
                         <li>
                             <a href="#">联系我</a>
@@ -42,7 +42,7 @@
         </div>
 
         <div class="col-md-12 column">
-            <form role="form">
+            <div>
                 <div class="form-group">
                     <label for="user_id">用户id</label><input type="text" class="form-control" id="user_id" />
                 </div>
@@ -50,7 +50,7 @@
                     <label for="password">密码</label><input type="password" class="form-control" id="password" />
                 </div>
                 <button onclick="ajax_login();" class="btn btn-default">登录</button>
-            </form>
+            </div>
         </div>
     </div>
 </div>
