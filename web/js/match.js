@@ -1,3 +1,12 @@
+$(document).ready(function(){
+
+    var api = getCookie("api");
+
+    if (api === "") {
+        $("#image_show_bar").hide();
+    }
+});
+
 
 function image_change() {
     var file = document.getElementById("input_image").files[0];
@@ -26,7 +35,6 @@ function ajax_face_match() {
         data: JSON.stringify({"api": api, "image": image}),
         dataType: "json",
         success: function(message){
-            console.log(message);
             if (message){
                 if (message.code === 0) {
                     $("#result_label").show();
@@ -44,7 +52,6 @@ function ajax_face_match() {
 
                         result_content.appendChild(sub_result);
                     })
-
 
                     // window.location="http://127.0.0.1";
                 }else{

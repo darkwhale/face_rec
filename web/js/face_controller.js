@@ -33,7 +33,9 @@ function ajax_register() {
                     document.cookie = 'username=' + message.data.username;
                     document.cookie = 'api=' + message.data.api;
 
-                    window.location="http://127.0.0.1"
+                    // window.location="http://127.0.0.1"
+                    window.location=get_main_url();
+
                 }else if (message.code === 1){
                     alert("用户已存在");
                 }else{
@@ -67,7 +69,8 @@ function ajax_login() {
                     document.cookie = 'username=' + message.data.username;
                     document.cookie = 'api=' + message.data.api;
 
-                    window.location="http://127.0.0.1";
+                    // window.location="http://127.0.0.1";
+                    window.location=get_main_url();
                 }else{
                     alert("用户名或密码错误");
                 }
@@ -89,7 +92,8 @@ function ajax_logout() {
             document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString();
         }
     }
-    window.location="http://127.0.0.1";
+    // window.location="http://127.0.0.1";
+    window.location=get_main_url();
 }
 
 function getCookie(name)

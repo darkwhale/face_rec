@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" name="referrer" content="no-referrer" >
+    <title>人脸识别系统</title>
+    <script type="text/javascript" src="http://cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="http://cdn.staticfile.org/twitter-bootstrap/3.0.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/face_controller.js"></script>
+    <script type="text/javascript" src="js/api.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <nav class="navbar navbar-default navbar-inverse" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">人脸识别系统</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="welcome.html">欢迎</a>
+                        </li>
+                        <li>
+                            <a href="database.html">数据库</a>
+                        </li>
+                        <li class="active">
+                            <a href="api.html">api</a>
+                        </li>
+                        <li>
+                            <a href="match.html">识别</a>
+                        </li>
+                        <li>
+                            <a href="contact.html">联系我</a>
+                        </li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a id="username" href="#"></a>
+                        </li>
+                        <li>
+                            <a id="login_symbol" href="login.html"></a>
+                        </li>
+                        <li>
+                            <a id="register_symbol" href="register.html"></a>
+                        </li>
+                        <li>
+                            <a id="logout_symbol" href="logout.html"></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <div class="col-md-12 column">
+            <div>
+                <strong id="api_show_content" style="font-size:18px" hidden></strong>
+                <hr id="api_show_hr" hidden style="height: 1px; background: #666">
+
+                <p>用户列表</p>
+                <pre><strong>POST </strong><strong class="url_prefix"></strong><strong>user/list</strong></pre>
+                <p>参数</p>
+                <pre>{
+    &quot;api&quot;: &quot;1590656656340869111&quot;
+}</pre>
+                <p>返回</p>
+                <pre>{
+    &quot;code&quot;: 0,
+    &quot;message&quot;: &quot;成功&quot;,
+    &quot;data&quot;: {
+        &quot;0001&quot;: [
+            &quot;1590852717425204452&quot;,
+            &quot;1590852717425204453&quot;
+        ]
+    }
+}</pre>
+
+                <hr style="height: 1px; background: #666">
+                <p>添加person</p>
+                <pre><strong>POST </strong><strong class="url_prefix"></strong><strong>person/add</strong></pre>
+                <p>参数</p>
+                <pre>{
+    &quot;api&quot;: &quot;1590656656340869111&quot;,
+    &quot;personId&quot;: &quot;0001&quot;,
+    &quot;personName&quot;: &quot;张三&quot;
+}</pre>
+                <p>返回</p>
+                <pre>{
+    &quot;code&quot;: 0,
+    &quot;message&quot;: &quot;成功&quot;,
+    &quot;data&quot;: {
+        &quot;personId&quot;: &quot;0001&quot;,
+        &quot;personName&quot;: &quot;张三&quot;
+    }
+}</pre>
+
+                <hr style="height: 1px; background: #666">
+                <p>删除person</p>
+                <pre><strong>POST </strong><strong class="url_prefix"></strong><strong>person/delete</strong></pre>
+                <p>参数</p>
+                <pre>{
+    &quot;api&quot;: &quot;1590656656340869111&quot;,
+    &quot;personId&quot;: &quot;0001&quot;
+}</pre>
+                <p>返回</p>
+                <pre>{
+    &quot;code&quot;: 0,
+    &quot;message&quot;: &quot;成功&quot;,
+    &quot;data&quot;: {
+        &quot;personId&quot;: &quot;0001&quot;,
+        &quot;personName&quot;: &quot;张三&quot;
+    }
+}</pre>
+
+                <hr style="height: 1px; background: #666">
+                <p>person列表</p>
+                <pre><strong>POST </strong><strong class="url_prefix"></strong><strong>person/list</strong></pre>
+                <p>参数</p>
+                <pre>{
+    &quot;api&quot;: &quot;1590656656340869111&quot;,
+    &quot;personId&quot;: &quot;0002&quot;
+}</pre>
+                <p>返回</p>
+                <pre>{
+    &quot;code&quot;: 0,
+    &quot;message&quot;: &quot;成功&quot;,
+    &quot;data&quot;: [
+        &quot;1590853135595295083&quot;,
+        &quot;1590893216624292405&quot;,
+        &quot;1590907268731697511&quot;
+    ]
+}</pre>
+
+                <hr style="height: 1px; background: #666">
+                <p>添加face</p>
+                <pre><strong>POST </strong><strong class="url_prefix"></strong><strong>facial/add</strong></pre>
+                <p>参数</p>
+                <pre>{
+	&quot;api&quot;: &quot;1590656656340869111&quot;,
+	&quot;personId&quot;: &quot;0001&quot;,
+	&quot;image&quot;: &quot;base64:/9j/4AAQSkZJRgABAQAAAQABA...gyaKQH//Z&quot;
+}</pre>
+                <p>返回</p>
+                <pre>{
+    &quot;code&quot;: 0,
+    &quot;message&quot;: &quot;成功&quot;,
+    &quot;data&quot;: {
+        &quot;id&quot;: &quot;1590990007180460148&quot;,
+        &quot;personId&quot;: &quot;0001&quot;
+    }
+}</pre>
+
+                <hr style="height: 1px; background: #666">
+                <p>删除face</p>
+                <pre><strong>POST </strong><strong class="url_prefix"></strong><strong>facial/delete</strong></pre>
+                <p>参数</p>
+                <pre>{
+	&quot;api&quot;: &quot;1590656656340869111&quot;,
+	&quot;personId&quot;: &quot;0001&quot;,
+	&quot;faceId&quot;: &quot;1590726718360293342&quot;
+}</pre>
+                <p>返回</p>
+                <pre>{
+    &quot;code&quot;: 0,
+    &quot;message&quot;: &quot;成功&quot;
+}</pre>
+
+                <hr style="height: 1px; background: #666">
+                <p>匹配单个face</p>
+                <pre><strong>POST </strong><strong class="url_prefix"></strong><strong>facial/single_match</strong></pre>
+                <p>参数</p>
+                <pre>{
+    &quot;api&quot;: &quot;1590656656340869111&quot;,
+    &quot;personId&quot;: &quot;0001&quot;,
+    &quot;image&quot;: &quot;base64:/9j/4AAQSkZJRgABAQAAAQABA...gyaKQH//Z&quot;
+}</pre>
+                <p>返回</p>
+                <pre>{
+    &quot;code&quot;: 0,
+    &quot;message&quot;: &quot;成功&quot;,
+    &quot;data&quot;: [
+        {
+            &quot;rectangle&quot;: {
+                &quot;left&quot;: 311,
+                &quot;right&quot;: 440,
+                &quot;top&quot;: 96,
+                &quot;bottom&quot;: 225
+            },
+            &quot;matched&quot;: 1
+        },
+        {
+            &quot;rectangle&quot;: {
+                &quot;left&quot;: 110,
+                &quot;right&quot;: 239,
+                &quot;top&quot;: 82,
+                &quot;bottom&quot;: 211
+            },
+            &quot;matched&quot;: 0
+        }
+    ]
+}</pre>
+
+                <hr style="height: 1px; background: #666">
+                <p>匹配多个face</p>
+                <pre><strong>POST </strong><strong class="url_prefix"></strong><strong>facial/multi_match</strong></pre>
+                <p>参数</p>
+                <pre>{
+    &quot;api&quot;: &quot;1590656656340869111&quot;,
+    &quot;image&quot;: &quot;base64:/9j/4AAQSkZJRgABAQAAAQABA...gyaKQH//Z&quot;
+}</pre>
+                <p>返回</p>
+                <pre>{
+    &quot;code&quot;: 0,
+    &quot;message&quot;: &quot;成功&quot;,
+    &quot;data&quot;: [
+        {
+            &quot;rectangle&quot;: {
+                &quot;left&quot;: 311,
+                &quot;right&quot;: 440,
+                &quot;top&quot;: 96,
+                &quot;bottom&quot;: 225
+            },
+            &quot;personId&quot;: null
+        },
+        {
+            &quot;rectangle&quot;: {
+                &quot;left&quot;: 110,
+                &quot;right&quot;: 239,
+                &quot;top&quot;: 82,
+                &quot;bottom&quot;: 211
+            },
+            &quot;personId&quot;: &quot;0002&quot;
+        }
+    ]
+}</pre>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -15,7 +15,8 @@ function ajax_person_add() {
             if (message){
                 if (message.code === 0) {
 
-                    window.location="http://127.0.0.1/database.html"
+                    window.location=get_main_url() + "database.html";
+                    // window.location="http://127.0.0.1/database.html"
                 }else if (message.code === 6){
                     alert("person已存在");
                 }else{

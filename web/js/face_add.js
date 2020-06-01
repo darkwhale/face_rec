@@ -27,11 +27,12 @@ function ajax_face_add() {
             if (message){
                 if (message.code === 0) {
                     console.log(message);
-                    window.location="http://127.0.0.1/database.html"
+                    // window.location="http://127.0.0.1/database.html"
+                    window.location = get_main_url() + "database.html";
                 }else if (message.code === 9){
                     alert("person不存在");
                 }else{
-                    alert("数据错误")
+                    alert("未检测到人脸")
                 }
             }else {
                 alert("数据错误")

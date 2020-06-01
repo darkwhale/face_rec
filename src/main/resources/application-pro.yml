@@ -1,8 +1,8 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
     username: zxy
-    password: 940213
+    password: 931208
     url: jdbc:mysql://127.0.0.1/face?serverTimezone=UTC&characterEncoding=utf-8&useSSL=False
   jpa:
     show-sql: true
@@ -10,7 +10,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
 #    default-property-inclusion: non_null
   redis:
-    host: 192.168.99.100
+    host: 127.0.0.1
     port: 6379
 server:
   servlet:
@@ -18,6 +18,6 @@ server:
   port: 8080
 
 dest:
-  url: http://111.231.115.97:8000/get_feature
+  url: http://127.0.0.1:8000/get_feature
   imageServer: http://111.231.115.97/images/
 

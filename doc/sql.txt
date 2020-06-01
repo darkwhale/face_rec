@@ -2,7 +2,7 @@ set sql_mode ='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISI
 
 DROP TABLE IF EXISTS `user_info`;
 create table `user_info`(
-    `id` varchar(11) not null,
+    `id` varchar(32) not null,
     `username` varchar(32) not null,
     `password` varchar(32) not null,
     `api` varchar(32) not null,

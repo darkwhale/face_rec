@@ -8,7 +8,6 @@
     <script type="text/javascript" src="js/common.js"></script>
     <script type="text/javascript" src="http://cdn.staticfile.org/twitter-bootstrap/3.0.1/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/face_controller.js"></script>
-    <script type="text/javascript" src="js/database.js"></script>
 </head>
 
 <body>
@@ -22,10 +21,10 @@
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li>
+                        <li class="active">
                             <a href="welcome.html">欢迎</a>
                         </li>
-                        <li  class="active">
+                        <li>
                             <a href="database.html">数据库</a>
                         </li>
                         <li>
@@ -54,23 +53,24 @@
                         </li>
                     </ul>
                 </div>
-
             </nav>
         </div>
 
         <div class="col-md-12 column">
             <div>
-                <strong id="user_info" style="font-size:18px"></strong>
-                <a href="face_add.html"><button id="face-add" type="button" class="btn btn-default pull-right">添加face</button></a>
-                <a href="person_add.html"><button id="person-add" type="button" class="btn btn-default pull-right" style="margin-right: 20px">添加person</button></a>
+                <strong style="font-size:18px">欢迎使用人脸识别系统，我们提供免费的人脸识别服务</strong>
+                <br>
+                <br>
+
+                <strong style="font-size:18px">你可以注册最多1000张人脸图像，并调用api接口识别人脸图像的身份</strong>
+
+                <br><br>
+                <strong style="font-size:18px">如果想尝试人脸识别功能，</strong><br>
+                <strong style="font-size:18px">你需要->注册->登录->添加person->添加face</strong><br>
+
             </div>
         </div>
 
-        <hr>
-
-        <div class="col-md-12 column">
-            <p id="image_content"></p>
-        </div>
     </div>
 </div>
 

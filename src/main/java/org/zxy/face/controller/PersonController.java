@@ -28,7 +28,7 @@ public class PersonController {
         return personService.delete(personDeleteForm);
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseVO list(@Valid @RequestBody PersonListForm personListForm) {
         return personService.list(personListForm);
     }
