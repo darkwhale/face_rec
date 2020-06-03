@@ -23,7 +23,7 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="welcome.html">欢迎</a>
+                            <a href="index.html">欢迎</a>
                         </li>
                         <li>
                             <a href="database.html">数据库</a>
@@ -60,6 +60,9 @@
 
         <div class="col-md-12 column" id="image_show_bar">
             <div>
+                <div>
+                    <strong style="font-size:18px">人脸识别测试，支持包含多张人脸的图片：</strong>
+                </div>
 
                 <div class="form-group">
                     <img id="image_window" src="" style="display: none" alt="">
@@ -73,10 +76,22 @@
         </div>
 
         <div class="col-md-12 column">
-            <h4 id="result_label" hidden>识别结果：</h4>
-            <div id="result_list">
+            <h4 id="result_label" style="font-size:16px" hidden><strong>识别结果：</strong></h4>
 
-            </div>
+            <table class="table table-condensed table-hover table-bordered" id="result_table" hidden style="width: 70%">
+                    <thead>
+                    <tr>
+                        <th width="60%">
+                            <span style="font-size:16px">人脸位置(左 右 上 下)</span>
+                        </th>
+                        <th  width="40%">
+                            <span style="font-size:16px">person_id</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody id="result_tbody">
+                    </tbody>
+            </table>
         </div>
     </div>
 </div>

@@ -26,7 +26,7 @@ function ajax_face_match() {
     var api = getCookie("api");
     var image = document.getElementById("image_window").src;
 
-    document.getElementById("result_list").innerHTML = "";
+    // document.getElementById("result_list").innerHTML = "";
 
     $.ajax({
         type: "post",
@@ -38,20 +38,28 @@ function ajax_face_match() {
             if (message){
                 if (message.code === 0) {
                     $("#result_label").show();
-                    var result_content = document.getElementById("result_list");
-                    message.data.forEach(function (item) {
-                        var sub_result = document.createElement("div");
-                        sub_result.style.fontSize = "18px";
+                    $("#result_table").show();
 
-                        sub_result.textContent = "rectangle: (" +
+                    var result_table = document.getElementById("result_tbody");
+                    result_table.innerText = "";
+                    message.data.forEach(function (item) {
+                        var row = document.createElement('tr');
+                        var rectangle_cell = document.createElement('td');
+                        rectangle_cell.style.fontSize = "16px";
+                        rectangle_cell.innerHTML = "rectangle: (" +
                             item.rectangle.left + "\t" +
                             item.rectangle.right + "\t" +
                             item.rectangle.top + "\t" +
-                            item.rectangle.bottom + ")\t"
-                            + (item.personId == null? "未匹配": item.personId);
+                            item.rectangle.bottom + ")";
+                        row.appendChild(rectangle_cell);
 
-                        result_content.appendChild(sub_result);
-                    })
+                        var person_cell = document.createElement("td");
+                        person_cell.innerHTML = (item.personId == null? "未匹配": item.personId);
+                        person_cell.style.fontSize = "16px";
+                        row.appendChild(person_cell);
+
+                        result_table.appendChild(row);
+                    });
 
                     // window.location="http://127.0.0.1";
                 }else{
